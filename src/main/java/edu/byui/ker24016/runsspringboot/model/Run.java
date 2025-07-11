@@ -1,20 +1,22 @@
 package edu.byui.ker24016.runsspringboot.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "run", schema = "runs", indexes = {
         @Index(name = "fk_run_iron_source_idx", columnList = "iron_source"),
         @Index(name = "fk_run_enter_type1_idx", columnList = "enter_type"),
         @Index(name = "fk_run_gold_source1_idx", columnList = "gold_source"),
         @Index(name = "fk_run_biome1_idx", columnList = "spawn_biome")
 })
+@NoArgsConstructor
+@AllArgsConstructor
 public class Run {
     @Id
     @Column(name = "id", nullable = false)
