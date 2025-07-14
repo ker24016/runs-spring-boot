@@ -2,11 +2,13 @@ package edu.byui.ker24016.runsspringboot;
 
 import edu.byui.ker24016.runsspringboot.model.*;
 import edu.byui.ker24016.runsspringboot.repository.*;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Page;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
@@ -14,6 +16,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @SpringBootApplication
 public class RunsSpringBootApplication implements CommandLineRunner {
@@ -37,10 +40,14 @@ public class RunsSpringBootApplication implements CommandLineRunner {
     }
 
     private static void intOrSkip(Scanner scanner, Consumer<Integer> consumer) {
+        Integer i = null;
         try {
-            consumer.accept(scanner.nextInt());
+            i = scanner.nextInt();
         } catch (InputMismatchException e) {
             System.out.println("Skipped!");
+        }
+        if (i != null) {
+            consumer.accept(i);
         }
     }
 
@@ -57,15 +64,15 @@ public class RunsSpringBootApplication implements CommandLineRunner {
             while (choice != Operation.EXIT) {
                 Operation.printOperations();
                 System.out.print("What would you like to do? ");
-                String input = scanner.nextLine();
-                if (input.isBlank()) {
+                String opChoice = scanner.nextLine();
+                if (opChoice.isBlank()) {
                     continue;
                 }
-                if (input.length() != 1) {
+                if (opChoice.length() != 1) {
                     System.out.println("Invalid option!");
                     continue;
                 }
-                choice = Operation.tryParseOperation(input.charAt(0));
+                choice = Operation.tryParseOperation(opChoice.charAt(0));
 
                 switch (choice) {
                     case null -> System.out.println("Invalid option!");
@@ -170,6 +177,52 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                         System.out.println("Whew! We did it.");
                     }
                     case VIEW -> {
+                        long runCount = runs.count();
+                        System.out.printf("There are %d runs recorded.\n", runCount);
+                        System.out.print("Starting run #: ");
+                        Integer start = null;
+                        try {
+                            String input = scanner.nextLine();
+                            if (input.isBlank()) {
+                                start = 1;
+                            } else {
+                                start = Integer.parseInt(input);
+                            }
+                        } catch (InputMismatchException e) {
+                            System.out.println("That's not a recognized number. Starting with run 1.");
+                            start = 1;
+                        }
+                        if (start < 1 || start > runCount) {
+                            System.out.println("Invalid range");
+                            break;
+                        }
+                        System.out.print("Ending run #: ");
+                        Integer end = null;
+                        try {
+                            String input = scanner.nextLine();
+                            if (input.isBlank()) {
+                                end = 1;
+                            } else {
+                                end = Integer.parseInt(input);
+                            }
+                        } catch (InputMismatchException e) {
+                            System.out.println("That's not a recognized number. Ending with the last run.");
+                            end = (int) runCount; // We are planning on 100k runs, that fits well within an int
+                        }
+                        if (end < start || end > runCount) {
+                            System.out.println("Invalid range");
+                            break;
+                        }
+                        List<Run> matchedRuns = runs.getAllByIdBetweenOrderByIdAsc(start, end);
+                        System.out.println(Run.getPrettyHeader());
+                        for (int i = 0; i < matchedRuns.size(); i++) { // Paginate results
+                            System.out.println(matchedRuns.get(i).prettyString());
+                            if (i % 10 == 9 && i < matchedRuns.size() - 1) {
+                                System.out.println("Press enter to see more...");
+                                scanner.nextLine();
+                                System.out.println(Run.getPrettyHeader());
+                            }
+                        }
                     }
                     case UPDATE -> {
                     }

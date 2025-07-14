@@ -18,6 +18,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Run {
+    private static final String PRETTY_HEADER = "Run # | Date | Iron | Enter | Gold | Spawn | Seed | Gold Dropped | Rods | Blazes | Flint | Gravel | Deaths | Jumps | Eyes | Dia Picks | Pearls Used | Obsidian Placed | Dia Sword";
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -66,4 +67,48 @@ public class Run {
 
     @Column(name = "diamond_sword_crafted") private Integer diamondSwordCrafted;
 
+    public String prettyString() {
+        return new StringBuilder(id)
+                .append(" | ")
+                .append(datePlayed)
+                .append(" | ")
+                .append(ironSource.getName())
+                .append(" | ")
+                .append(enterType.getName())
+                .append(" | ")
+                .append(goldSource.getName())
+                .append(" | ")
+                .append(spawnBiome.getName())
+                .append(" | ")
+                .append(seed)
+                .append(" | ")
+                .append(goldDropped)
+                .append(" | ")
+                .append(blazeRods)
+                .append(" | ")
+                .append(blazesKilled)
+                .append(" | ")
+                .append(flintPickedUp)
+                .append(" | ")
+                .append(gravelMined)
+                .append(" | ")
+                .append(totalDeaths)
+                .append(" | ")
+                .append(jumps)
+                .append(" | ")
+                .append(eyesUsed)
+                .append(" | ")
+                .append(diamondPicksCrafted)
+                .append(" | ")
+                .append(enderPearlsUsed)
+                .append(" | ")
+                .append(obsidianPlaced)
+                .append(" | ")
+                .append(diamondSwordCrafted)
+                .toString();
+    }
+
+    public static String getPrettyHeader() {
+        return PRETTY_HEADER;
+    }
 }
