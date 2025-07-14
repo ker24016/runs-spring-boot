@@ -2,13 +2,11 @@ package edu.byui.ker24016.runsspringboot;
 
 import edu.byui.ker24016.runsspringboot.model.*;
 import edu.byui.ker24016.runsspringboot.repository.*;
-import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Limit;
-import org.springframework.data.domain.Page;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
@@ -16,7 +14,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 @SpringBootApplication
 public class RunsSpringBootApplication implements CommandLineRunner {
@@ -55,6 +52,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
         SpringApplication.run(RunsSpringBootApplication.class, args);
     }
 
+    @SuppressWarnings("RedundantThrows")
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Booting up...");
@@ -180,7 +178,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                         long runCount = runs.count();
                         System.out.printf("There are %d runs recorded.\n", runCount);
                         System.out.print("Starting run #: ");
-                        Integer start = null;
+                        int start;
                         try {
                             String input = scanner.nextLine();
                             if (input.isBlank()) {
@@ -197,7 +195,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                             break;
                         }
                         System.out.print("Ending run #: ");
-                        Integer end = null;
+                        int end;
                         try {
                             String input = scanner.nextLine();
                             if (input.isBlank()) {
