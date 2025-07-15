@@ -5,7 +5,8 @@ import org.springframework.data.domain.Limit;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Biomes extends CrudRepository<Biome, Integer> {
-    List<Biome> findFirstByNameEqualsIgnoreCase(String name, Limit limit);
+    Optional<Biome> findTopByNameEqualsIgnoreCase(String name);
 }

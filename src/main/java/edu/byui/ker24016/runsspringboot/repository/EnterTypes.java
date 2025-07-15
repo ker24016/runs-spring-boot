@@ -5,7 +5,8 @@ import org.springframework.data.domain.Limit;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnterTypes extends CrudRepository<EnterType, Integer> {
-    List<EnterType> findFirstByNameEqualsIgnoreCase(String name, Limit limit);
+    Optional<EnterType> findTopByNameEqualsIgnoreCase(String name);
 }

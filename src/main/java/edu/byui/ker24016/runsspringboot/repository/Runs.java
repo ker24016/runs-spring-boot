@@ -12,4 +12,6 @@ import java.util.List;
 @Repository
 public interface Runs extends CrudRepository<Run, Integer> {
     List<Run> getAllByIdBetweenOrderByIdAsc(Integer idAfter, Integer idBefore);
+
+    Run getRunById(Integer id);
 }

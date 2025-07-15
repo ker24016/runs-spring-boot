@@ -68,44 +68,43 @@ public class Run {
     @Column(name = "diamond_sword_crafted") private Integer diamondSwordCrafted;
 
     public String prettyString() {
-        return new StringBuilder(id)
-                .append(" | ")
-                .append(datePlayed)
-                .append(" | ")
-                .append(ironSource.getName())
-                .append(" | ")
-                .append(enterType.getName())
-                .append(" | ")
-                .append(goldSource.getName())
-                .append(" | ")
-                .append(spawnBiome.getName())
-                .append(" | ")
-                .append(seed)
-                .append(" | ")
-                .append(goldDropped)
-                .append(" | ")
-                .append(blazeRods)
-                .append(" | ")
-                .append(blazesKilled)
-                .append(" | ")
-                .append(flintPickedUp)
-                .append(" | ")
-                .append(gravelMined)
-                .append(" | ")
-                .append(totalDeaths)
-                .append(" | ")
-                .append(jumps)
-                .append(" | ")
-                .append(eyesUsed)
-                .append(" | ")
-                .append(diamondPicksCrafted)
-                .append(" | ")
-                .append(enderPearlsUsed)
-                .append(" | ")
-                .append(obsidianPlaced)
-                .append(" | ")
-                .append(diamondSwordCrafted)
-                .toString();
+        return id +
+               " | " +
+               datePlayed +
+               " | " +
+               ironSource.getName() +
+               " | " +
+               enterType.getName() +
+               " | " +
+               goldSource.getName() +
+               " | " +
+               spawnBiome.getName() +
+               " | " +
+               seed +
+               " | " +
+               goldDropped +
+               " | " +
+               blazeRods +
+               " | " +
+               blazesKilled +
+               " | " +
+               flintPickedUp +
+               " | " +
+               gravelMined +
+               " | " +
+               totalDeaths +
+               " | " +
+               jumps +
+               " | " +
+               eyesUsed +
+               " | " +
+               diamondPicksCrafted +
+               " | " +
+               enderPearlsUsed +
+               " | " +
+               obsidianPlaced +
+               " | " +
+               diamondSwordCrafted;
     }
 
     public static String getPrettyHeader() {

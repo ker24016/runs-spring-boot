@@ -5,7 +5,8 @@ import org.springframework.data.domain.Limit;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GoldSources extends CrudRepository<GoldSource, Integer> {
-    List<GoldSource> findFirstByNameEqualsIgnoreCase(String name, Limit limit);
+    Optional<GoldSource> findTopByNameEqualsIgnoreCase(String name);
 }
