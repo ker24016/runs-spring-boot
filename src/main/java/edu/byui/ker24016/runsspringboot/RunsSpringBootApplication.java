@@ -223,6 +223,17 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                         }
                     }
                     case UPDATE -> {
+                        long runCount = runs.count();
+                        System.out.printf("There are %d runs recorded.\n", runCount);
+                        System.out.print("Edit Run #: ");
+                        int runNum;
+                        try {
+                            runNum = Integer.parseInt(scanner.nextLine());
+                        } catch (InputMismatchException e) {
+                            System.out.println("That's not a valid number.");
+                            break;
+                        }
+                        System.out.println("Edit what?: "); // TODO: There's a better way to structure this program
                     }
                     case DELETE -> {
                     }
