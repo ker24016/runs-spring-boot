@@ -2,6 +2,7 @@ package edu.byui.ker24016.runsspringboot;
 
 import edu.byui.ker24016.runsspringboot.model.Run;
 import edu.byui.ker24016.runsspringboot.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -45,6 +46,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
 
     @SuppressWarnings("RedundantThrows")
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
         System.out.println("Booting up...");
         System.out.println("Welcome!");
@@ -417,7 +419,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
             Operation[] operations = Operation.values();
             for (int i = 1; i < operations.length; i++) {
                 Operation operation = operations[i];
-                System.out.printf("%d. %s (%c)", i, operation.description, operation.key);
+                System.out.printf("%d. %s (%c)\n", i, operation.description, operation.key);
             }
         }
 
