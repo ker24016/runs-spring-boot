@@ -8,7 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.time.Instant;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 @SpringBootApplication
 public class RunsSpringBootApplication implements CommandLineRunner {
     public static final Runnable ON_SKIP = () -> System.out.println("Skipped!");
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy k:mm:ss");
     protected Biomes biomes;
     protected EnterTypes enterTypes;
     protected GoldSources goldSources;
@@ -78,7 +78,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                         System.out.print("Time played (MM/dd/yyyy hh:mm:ss, or blank for \"now\"): ");
                         runBuilder.datePlayed(readT(scanner, input -> {
                             try {
-                                return Optional.of(Instant.from(DATE_TIME_FORMATTER.parse(input)));
+                                return Optional.of(LocalDateTime.parse(input, DATE_TIME_FORMATTER).atZone(ZoneId.of("America/New_York")).toInstant()); // Might have some problems with dst
                             } catch (DateTimeParseException e) {
                                 return Optional.empty();
                             }
@@ -201,7 +201,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                         }
                         System.out.print("Edit what?: ");
                         String option = scanner.nextLine();
-                        switch (option) {
+                        switch (option) { // There's 100% a better way to do this.
                             case "id":
                                 System.out.print("Run Number: ");
                                 readInt(scanner).ifPresent(run::setId); break;
@@ -209,7 +209,7 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                                 System.out.print("Time played (MM/dd/yyyy hh:mm:ss, or blank for \"now\"): ");
                                 run.setDatePlayed(readT(scanner, input -> {
                                 try {
-                                    return Optional.of(Instant.from(DATE_TIME_FORMATTER.parse(input)));
+                                    return Optional.of(LocalDateTime.parse(input, DATE_TIME_FORMATTER).atZone(ZoneId.of("America/New_York")).toInstant()); // Might have some problems with dst
                                 } catch (DateTimeParseException e) {
                                     return Optional.empty();
                                 }
@@ -297,11 +297,12 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                             System.out.println("Nothing to delete!");
                             break;
                         }
+                        System.out.print("Delete run #: ");
                         readInt(scanner, 1, runCount)
-                                .ifPresent(runNum -> {
+                                .ifPresentOrElse(runNum -> {
                                     runs.deleteById(runNum);
                                     System.out.println("Deleted!");
-                                });
+                                }, () -> System.out.println("Cancelled!"));
                     }
                     case EXIT -> System.out.println("Goodbye!");
                 }
@@ -331,13 +332,13 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                 }
                 int parsed = Integer.parseInt(input);
                 if (Math.clamp(parsed, min, max) != parsed) {
-                    System.out.println("That's outside the valid range. Please try again:\n> ");
+                    System.out.print("That's outside the valid range. Please try again:\n> ");
                     continue;
                 }
 
                 return Optional.of(parsed);
             } catch (InputMismatchException e) {
-                System.out.println("Please enter a number, or enter to skip.\n> ");
+                System.out.print("Please enter a number, or enter to skip.\n> ");
             }
         }
     }
@@ -364,12 +365,12 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                 }
                 long parsed = Long.parseLong(input);
                 if (Math.clamp(parsed, min, max) != parsed) {
-                    System.out.println("That's outside the valid range. Please try again:\n> ");
+                    System.out.print("That's outside the valid range. Please try again:\n> ");
                     continue;
                 }
                 return Optional.of(parsed);
             } catch (InputMismatchException e) {
-                System.out.println("Please enter a number, or enter to skip.\n> ");
+                System.out.print("Please enter a number, or enter to skip.\n> ");
             }
         }
     }
@@ -392,9 +393,9 @@ public class RunsSpringBootApplication implements CommandLineRunner {
                 if (t.isPresent()) {
                     return t;
                 }
-                System.out.println("Invalid input. Please try again, or hit enter to skip.\n> ");
+                System.out.print("Invalid input. Please try again, or hit enter to skip.\n> ");
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please try again, or hit enter to skip.\n> ");
+                System.out.print("Invalid input. Please try again, or hit enter to skip.\n> ");
             }
         }
     }

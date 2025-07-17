@@ -72,13 +72,13 @@ public class Run {
                " | " +
                datePlayed +
                " | " +
-               ironSource.getName() +
+               (ironSource == null ? "null" : ironSource.getName()) +
                " | " +
-               enterType.getName() +
+               (enterType == null ? "null" : enterType.getName()) +
                " | " +
-               goldSource.getName() +
+               (goldSource == null ? "null" : goldSource.getName()) +
                " | " +
-               spawnBiome.getName() +
+               (spawnBiome == null ? "null" : spawnBiome.getName()) +
                " | " +
                seed +
                " | " +
